@@ -49,6 +49,8 @@ dependencies:
 ```
 ~~~
 
+> 请确保上述示例中所列的元素**均在第一层级上**，即不要有缩进，否则脚本会识别不到对应的元素
+
 ### Group Assertion
 
 Group Assertion 是每个文件一个的块，仅包含一个指定 Group 名字的属性，应紧随 `## Supported pattern` 。
