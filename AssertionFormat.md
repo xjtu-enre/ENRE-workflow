@@ -42,9 +42,9 @@ import Foo
 
 ```yaml                                   <--- Case Assertion
 name: Simple Import
-entities:
+entity:
     ...
-dependencies:
+relation:
     ...
 ```
 ~~~
@@ -110,7 +110,7 @@ Case Assertion 是该测试用例的断言部分，以 `YAML` 格式编写，将
 ~~~md
 ```yaml
 name: <String>
-entities:
+entity:
     filter: <Entity Kind: String， Optional>
     exact: <Bool, Optional>
     items:
@@ -119,7 +119,7 @@ entities:
             category: <Entity Kind: String, Optional>
             negative: true (Optional)
             ... (More custom prperties)
-dependencies:
+relation:
     filter: <Dependency Kind: String, Optional>
     exact: <Bool, Optional>
     items:
@@ -136,7 +136,7 @@ dependencies:
 
 * `name` 是该 Case 的名字，将被用作包含所有 Case Code 文件的文件夹的名字，**必须在当前文件中保持唯一**；
 
-* `entities` 断言 Case Code 中所有**想要进行验证的实体**（不必是所有出现的实体）：
+* `entity` 断言 Case Code 中所有**想要进行验证的实体**（不必是所有出现的实体）：
 
   + `filter` 是为 `items` 中所有实体快速指定类别的实体类别字符串，仅当 `items` 中所有实体的类别都一样时才可以使用；
   
@@ -166,7 +166,7 @@ dependencies:
 
     * `...` 是其他自定义的描述实体的属性，这些属性不会被脚本解析，可以作自己的测试用。
   
-* `dependencies` 断言 Case Code 中所有**想要进行验证的依赖**（不必是所有出现的依赖）：（以下仅说明和 `entities` 中意义用法不一致的属性）
+* `relation` 断言 Case Code 中所有**想要进行验证的依赖**（不必是所有出现的依赖）：（以下仅说明和 `entities` 中意义用法不一致的属性）
 
   + `src` 和 `dest` 是实体索引字符串，通过**文件名+类型+下标**的形式来从代码文件中索引出想要的实体，格式为
     ```md
@@ -194,4 +194,3 @@ dependencies:
     * `File Name` 必填；
 
     * `End Line` 和 `End Column` **必不填**
-
