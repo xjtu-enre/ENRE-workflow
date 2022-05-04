@@ -170,9 +170,9 @@ dependencies:
 
   + `src` 和 `dest` 是实体索引字符串，通过**文件名+类型+下标**的形式来从代码文件中索引出想要的实体，格式为
     ```md
-    <File Name: String>/<Entity Kind: String>[<Index: Int>]
+    <File Name: String>/<Entity Reference: String>[<Index: Int>]
     ```
-    其中，`File Name` 是该实体所在的文件名，**只能使用 `file0` 格式的文件名**；`Entity Kind` 是该实体的类型名称；`Index` 是该实体在该文件的该类型实体中的索引号，**从 0 开始**。
+    其中，`File Name` 是该实体所在的文件名，**只能使用 `file0` 格式的文件名**；`Entity Reference` 是该实体的类型名称或**短名字（以双引号包裹）**；`Index` 是该实体在该文件的该类型/名字实体中的索引号，**从 0 开始**。
 
     例如：
     ```md
@@ -180,6 +180,14 @@ dependencies:
     ```
     ```md
     file1/Method[3]       // 第 2 个代码块的第 4 个方法实体
+    ```
+
+    ```md
+    file1/"Foo"[0]        // 第 2 个代码块的第 1 个名为 Foo 的实体
+    ```
+
+    ```md
+    file1/"Foo"[1]        // 第 2 个代码块的第 2 个名为 Foo 的实体（以在有重名实体时也能定位到想要的实体）
     ```
   + `loc` 指示该依赖发生的位置，格式与实体的位置一样，但
 
