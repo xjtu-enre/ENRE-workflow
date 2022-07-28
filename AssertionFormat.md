@@ -181,7 +181,7 @@ relation:
     ```
 
     ```md
-    parameter: 'a'[file1:2:1]  // parameter 类型的短名字为 a 的在第 1 个代码块中被定义的起始行为 1 的实体
+    parameter:'a'[file1:2:1]  // parameter 类型的短名字为 a 的在第 1 个代码块中被定义的起始行为 1 的实体
     ```
   + `loc` 指示该依赖发生的位置，格式与实体的位置一样，但
 
