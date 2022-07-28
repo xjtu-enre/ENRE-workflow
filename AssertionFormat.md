@@ -4,39 +4,41 @@
 
 以下面的简易文档为例（其中的内容不代表真实情况），其中出现了本规范中所用到的 4 个核心概念。
 
+> 标题级号、代码块语言标识符等须严格遵照
+
 ~~~md
-## Dependency: Import
+## Relation: Import                       <--- File Title
 
 Descriptions...
 
-### Supported pattern
+### Supported Patterns                    <--- Pattern Title
 
 ```yaml                                   <--- Group Assertion
 name: Import
 ```
 
-### Syntax: Import declaration
+#### Syntax: Import declaration           <--- Syntax / Semantic / Runtime / Supplemental
 
-```txt
-ImportDeclaration:
+```text
+ImportDeclaration :
     import xxx from xxx ;
 
 ...
 ```
 
-**Examples:**
+##### Examples                            <--- Example Title
 
-* Named import                            <--- Case Title
+###### Named import                       <--- Case Title
 
 ```java                                   <--- Case Code 0
-// Foo.java
+//// Foo.java
 class Foo {
   /* ... */
 }
 ```
 
 ```java                                   <--- Case Code 1
-// Bar.java
+//// path/to/Bar.java
 import Foo
 ```
 
@@ -53,7 +55,7 @@ relation:
 
 ### Group Assertion
 
-Group Assertion 是每个文件一个的块，仅包含一个指定 Group 名字的属性，应紧随 `## Supported pattern` 。
+Group Assertion 是每个文件仅一个的块，仅包含一个指定 Group 名字的属性，应紧随 `## Supported Patterns` 。
 
 ~~~md
 ```yaml
@@ -62,6 +64,8 @@ name: <Group Name: String>
 ~~~
 
 其中，`Group Name` 只能是一个字符串，这个字符串将被用作存放该文件所产生的所有用例的文件夹的名字。
+
+字符串中可以使用`空格`、`数字`和`其他标点符号`，在生成文件夹时除字母数字外的字符均被替换为`-`。
 
 ### Case
 
@@ -72,10 +76,10 @@ Case 是一个测试用例，包含一个标题，若干个自己语言的代码
 Case Title 是标识一个 Case 开始的唯一记号，格式为
 
 ~~~md
-* <Case Name: String>
+###### <Case Name: String>
 ~~~
 
-其中，`Case Name` 只能是一个字符串，这个字符串将被用作存放该 Case 所产生的所有语言文件的文件夹的名字。
+其中，`Case Name` 只能是一个字符串，可以使用任意字符，仅供阅读使用。
 
 #### Case Code
 
@@ -83,7 +87,7 @@ Case Code 是该测试用例的代码块部分，将被脚本抽取到另外的�
 
 ~~~md
 ```<Lang: String>
-// <File Name: String, Path Like>
+[//// FenceMeta]
 <Code: String>
 ```
 ~~~
@@ -91,10 +95,9 @@ Case Code 是该测试用例的代码块部分，将被脚本抽取到另外的�
 其中，
 * `Lang` 是表示该代码块语言的字符串，正确的设置 `Lang` 可以在各处启用代码高亮，`Lang` 也被脚本用来识别 Case 的 Code 部分，请务必正确设置；
 
-* `File Name` 是**可选的**设置该代码块被抽取后生成的代码文件的文件名的字符串，如 `Test.java` ，也可以是多层文件夹后的文件，如 `path/to/my/File.java`，这个路径会被脚本正确解析并在沙盒中创建相应的路径。**该项必须以双正斜杠 `//` 作为行起始，且该行不再包含其他内容**；
-  > 如果不指定，会默认以 `file0.java`、`file1.java` 的格式为各个代码块命名。
+* `FenceMeta` 是配置该测试用例行为的元信息，参考[这个文件的注释部分](https://github.com/xjtu-enre/ENRE-ts/blob/main/packages/enre-doc-meta-parser/src/fence-meta/index.ts)了解全部语法；
 
-* `Code` 是代码部分，可以写任何代码，**如果没有指定上面的 `File Name`，则该部分的第一行不能是以 `//` 标识的注释。**
+* `Code` 是代码部分，可以写任何代码。
 
 > Case Code 的一般性原则：
 > * Case Code 中的代码请务必保持简洁，仅体现想要测试的语法点，**不要有非必要的其他语法点出现；**
@@ -111,23 +114,24 @@ Case Assertion 是该测试用例的断言部分，以 `YAML` 格式编写，将
 ```yaml
 name: <String>
 entity:
-    filter: <Entity Kind: String， Optional>
-    exact: <Bool, Optional>
+    [type: <Entity Type: String>]
+    [extra: <Bool, Default true>]
     items:
         -   name: <String>
+            [qualified: <String>]
             loc: <Loc String>
-            category: <Entity Kind: String, Optional>
-            negative: true (Optional)
+            [type: <Entity Type: String>]
+            [negative: <Bool, Default false>]
             ... (More custom prperties)
 relation:
-    filter: <Dependency Kind: String, Optional>
-    exact: <Bool, Optional>
+    [type: <Relation Type: String, Optional>]
+    [extra: <Bool, Optional>]
     items:
-        -   src: <Entity Ref String>
-            dest: <Entity Ref String>
+        -   src: <Entity Query String>
+            dest: <Entity Query String>
             loc: <Loc String>
-            category: <Dependency Kind: String, Optional>
-            negative: true (Optional)
+            [type: <Relation Type: String>]
+            [negative: <Bool, Default false>]
             ... (More custom prperties)
 ```
 ~~~
@@ -138,31 +142,21 @@ relation:
 
 * `entity` 断言 Case Code 中所有**想要进行验证的实体**（不必是所有出现的实体）：
 
-  + `filter` 是为 `items` 中所有实体快速指定类别的实体类别字符串，仅当 `items` 中所有实体的类别都一样时才可以使用；
+  + `type` 是为 `items` 中所有实体快速指定类别的实体类别字符串；
   
-  + `exact` 是指示 `items` 中所列的实体即是所有应该被抽取的实体的布尔值，对比结果多于或少于 `items` 中所列的情况均视为失败（不受 `negative` 影响）；
+  + `extra` 是指示 `items` 中所列的实体即是所有应该被抽取的实体的布尔值，对比结果多于或少于 `items` 中所列的情况均视为失败（不受 `negative` 影响，默认 `true`，同时指定 `type` 时仅对该类型的实体进行检验）；
 
   + `items` 是列举想要进行验证的实体的数组，数组的每一项的第一个属性均以 `-` 开头，**注意缩进**：
 
     * `name` 是该实体的**短名字**；
 
-    * `loc` 是该实体的**位置字符串**，格式为
-      ```md
-      <File Name: String, Optional>:<Start Line: Int>:<Start Column: Int>:<End Line: Int, Optional>:<End Column: Int, Optional>
-      ```
-      其中，`File Name` 是实体所在的文件，可以是文件名（带扩展名）或默认的 `file0`等，如果只有一个文件，则该项连同后面的冒号 `:` 可以省略；随后是 4 个整数， 分别代表开始行号、开始列号、结束行号（可选）、结束列号（可选），以冒号 `:` 分隔。实体结束的行列号可省略当且仅当其可以通过 `开始行列号 + name 的长度` 计算得出；
+    * `qualified` 是该实体的**全名**；
 
-      例如：
-      ```md
-      file0:1:0:1:5
-      ```
-      ```md
-      Test.java:2:1:2:8
-      ```
+    * `loc` 是该实体的**位置字符串**，参考[这个文件的注释部分](https://github.com/xjtu-enre/ENRE-ts/blob/main/packages/enre-doc-meta-parser/src/loc-meta/index.ts)了解全部语法；
     
-    * `category` 是该实体的类别字符串，仅当未指定 `filter` 时才需要指定该值，两者同时只能出现一个；
+    * `type` 是该实体的类别字符串；如省略会直接继承上一级的 type 值；如果本级和上级都有，本级的值会覆盖上级的值；两级需至少有一级指定该属性；
 
-    * `negative` 是指示该实体是一个反例的布尔值，一般不需要显式写出来，仅当需要标识反例时，设置其值为 `true` 即可。凡是成果识别该实体的工具均视为失败；
+    * `negative` 是指示该实体是一个反例的布尔值，一般不需要显式写出来，仅当需要标识反例时，设置其值为 `true` 即可。凡是识别该实体的工具均视为失败；
 
     * `...` 是其他自定义的描述实体的属性，这些属性不会被脚本解析，可以作自己的测试用。
   
@@ -170,27 +164,25 @@ relation:
 
   + `src` 和 `dest` 是实体索引字符串，通过**文件名+类型+下标**的形式来从代码文件中索引出想要的实体，格式为
     ```md
-    <File Name: String>/<Entity Reference: String>[<Index: Int>]
+    <Entity Type: String>:<Entity Name: String>[[<loc: LoC String>]]
     ```
-    其中，`File Name` 是该实体所在的文件名，**只能使用 `file0` 格式的文件名**；`Entity Reference` 是该实体的类型名称或**短名字（以双引号包裹）**；`Index` 是该实体在该文件的该类型/名字实体中的索引号，**从 0 开始**。
+    其中，`Entity Type` 是该实体的类型名称；`Entity Name` 是**以单引号括起来的**该实体的名字，有 `.` 存在的被解析为**全名**，反之被解析为**短名字**；`loc` 是可选的当通过 type 和 name 也无法唯一确定实体时可额外附加的位置信息，格式与上文所述的相同。
 
     例如：
     ```md
-    file0/Variable[0]     // 第 1 个代码块的第 1 个变量实体
+    class:'Foo'           // class 类型的短名字为 Foo 的实体
     ```
     ```md
-    file1/Method[3]       // 第 2 个代码块的第 4 个方法实体
-    ```
-
-    ```md
-    file1/"Foo"[0]        // 第 2 个代码块的第 1 个名为 Foo 的实体
+    class:'Foo.Bar'       // class 类型的全名为 Foo.Bar 的实体
     ```
 
     ```md
-    file1/"Foo"[1]        // 第 2 个代码块的第 2 个名为 Foo 的实体（以在有重名实体时也能定位到想要的实体）
+    parameter:'a'[1]      // parameter 类型的短名字为 a 的起始行为 1 的实体
+    ```
+
+    ```md
+    parameter: 'a'[file1:2:1]  // parameter 类型的短名字为 a 的在第 1 个代码块中被定义的起始行为 1 的实体
     ```
   + `loc` 指示该依赖发生的位置，格式与实体的位置一样，但
-
-    * `File Name` 必填；
 
     * `End Line` 和 `End Column` **必不填**
