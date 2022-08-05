@@ -164,25 +164,30 @@ relation:
 
   + `src` 和 `dest` 是实体索引字符串，通过**类型+名字+位置**的形式来从代码文件中索引出想要的实体，格式为
     ```md
-    <Entity Type: String>:<Entity Name: String>[[<loc: LoC String>]]
+    <Entity Type: String>:<Entity Name: String>[[Entity Predicates]]]
     ```
-    其中，`Entity Type` 是该实体的类型名称；`Entity Name` 是**以单引号括起来的**该实体的名字，有 `.` 存在的被解析为**全名**，反之被解析为**短名字**；`loc` 是可选的当通过 type 和 name 也无法唯一确定实体时可额外附加的位置信息，格式与上文所述的相同。
+    其中，`Entity Type` 是该实体的类型名称；`Entity Name` 是**以单引号括起来的**该实体的名字，有 `.` 存在的被解析为**全名**，反之被解析为**短名字**；`Entity Predicates` 是可选的当通过 type 和 name 也无法唯一确定实体时可额外附加的信息，格式请参考[这个文件的注释部分](https://github.com/xjtu-enre/ENRE-ts/blob/main/packages/enre-doc-meta-parser/src/entity-ref-meta/index.ts)。
 
     例如：
     ```md
-    class:'Foo'           // class 类型的短名字为 Foo 的实体
+    class:'Foo'                     // class 类型的短名字为 Foo 的实体
     ```
     ```md
-    class:'Foo.Bar'       // class 类型的全名为 Foo.Bar 的实体
+    class:'Foo.Bar'                 // class 类型的全名为 Foo.Bar 的实体
     ```
 
     ```md
-    parameter:'a'[1]      // parameter 类型的短名字为 a 的起始行为 1 的实体
+    parameter:'a'[@loc=1]           // parameter 类型的短名字为 a 的起始行为 1 的实体
     ```
 
     ```md
-    parameter:'a'[file1:2:1]  // parameter 类型的短名字为 a 的在第 1 个代码块中被定义的起始行为 1 的实体
+    parameter:'a'[@loc=file1:2:1]   // parameter 类型的短名字为 a 的在第 1 个代码块中被定义的起始行为 1 的实体
     ```
+
+    ```md
+    function:'foo'[@async=true @generator=true]  // function 类型的短名字为 foo 的实体，且存在属性 async 和 generator 为 true
+    ```
+
   + `loc` 指示该依赖发生的位置，格式与实体的位置一样，但
 
     * `End Line` 和 `End Column` **必不填**
