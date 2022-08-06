@@ -127,8 +127,8 @@ relation:
     [type: <Relation Type: String, Optional>]
     [extra: <Bool, Optional>]
     items:
-        -   src: <Entity Query String>
-            dest: <Entity Query String>
+        -   from: <Entity Query String>
+            to: <Entity Query String>
             loc: <Loc String>
             [type: <Relation Type: String>]
             [negative: <Bool, Default false>]
@@ -162,7 +162,7 @@ relation:
   
 * `relation` 断言 Case Code 中所有**想要进行验证的依赖**（不必是所有出现的依赖）：（以下仅说明和 `entities` 中意义用法不一致的属性）
 
-  + `src` 和 `dest` 是实体索引字符串，通过**类型+名字+位置**的形式来从代码文件中索引出想要的实体，格式为
+  + `from` 和 `to` 是实体索引字符串，通过**类型+名字+位置**的形式来从代码文件中索引出想要的实体，格式为
     ```md
     <Entity Type: String>:<Entity Name: String>[[Entity Predicates]]]
     ```
