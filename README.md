@@ -46,7 +46,29 @@ For a specification on how this is achieved, please refer to [Specifications / T
 
 ### Code Location
 
-If applicable, code location should **start from 1**.
+If applicable, code location (both line and column) should **start from 1**.
+
+### Location as Property
+
+The property `location` / `loc` should be used to refer the range of an entity's identifier only, not the whole block of the entity (in which case `range` should be used).
+
+```java
+/* Some comments */           <---------------------------------------- Range of the entity from (1,1) to (7,1)
+@SomeAnnotation(1)                                                    |
+public class Foo {            <-- location from (3,14) to (3,17)      |
+  public void bar() {                                                 |
+    /* ... */                                                         |
+  }                                                                   |
+}                             <----------------------------------------
+```
+
+For anonymous entity, `location` can only contain the start line and start column which indicates the start point of that entity. (`range` is still available)
+
+```java
+SomeClass sc = new SomeClass() {    <-- location (1,16) --------------- Range
+  String prop = 'new prop';                                           |
+}                                   <----------------------------------
+```
 
 ### Documentation
 
@@ -58,65 +80,7 @@ This kind of document holds definitions about what entities and relations can EN
 
 ##### Format
 
-```text
-|
-|> Title
-|
-|<----------------------------╶╷
-|                              |
-|> Syntax                      |
-|                              |
-|<--------------------------╶╷ |
-|                            | |
-|> Example                   | |
-|                            | |
-|> Meta (Expected output) --╶╵╶╵
-↓
-
-// Illustrative blocks (such as discussions, syntax explanations) are free to locate at anywhere.
-```
-
-Where every blocks means respectively:
-
-> Examples below are excerpt from `ENRE-java` specification.
-
-* **Title**: The title of the document.
-  + Example:
-    ```text
-    Entity: Variable
-    ```
-
-* **Syntax**: Production rules or any things describing the syntax.
-  + Example:
-    ```text
-    LocalVariableDeclaration:
-      {VariableModifier} LocalVariableType VariableDeclaratorList
-    
-    LocalVariableType:
-      UnannType
-      var
-    
-    ...
-    ```
-
-* **Example**: Sample code snippet derived by syntax rules. (Will be extracted for unit test)
-  + Example:
-    ```java
-    var a = 1;            // Legal
-    // var b = 2, c = 3.0;   // Illegal: multiple declarators
-    ```
-
-* **Meta (Expected output)**: Expected output that analyzers no matter which shall generate.
-  + Example:
-    ```yaml
-    name: VariableDeclaration
-    entities:
-        -   name: a
-            loc: [ 1, 5 ]
-            ...
-    ...
-    ```
-  + Extra: You could propose your own specification on format of this block, or refer to `ENRE-js`'s implementation [here](https://github.com/xjtu-enre/ENRE-NT.js/blob/main/scripts/md2/metaSchema.mjs).
+> Please refer to [AssertionFormat.md](./AssertionFormat.md) for details.
 
 #### Behavior Differences Document
 
