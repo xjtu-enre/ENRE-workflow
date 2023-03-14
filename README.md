@@ -1,5 +1,7 @@
 # Guidance on adopting ENRE to a new language
 
+> ENRE has [unified JSON format](./JSONFormat.jsonc) released, any comments are appreciated.
+
 ## Project Structure
 
 You are suggested to organize the new project as the following diagram shows:
@@ -28,7 +30,7 @@ You are suggested to organize the new project as the following diagram shows:
 
 ### Align with the latest and official specification
 
-Specification defines how a programing language constructs, including key words, production rules, and runtime behaviors, etc.. It is the most accurate and up-to-date information you can find nowhere else. Please always referring to the specification when you are documenting, coding and discussing.
+Specification defines how a programming language constructs, including key words, production rules, and runtime behaviors, etc.. It is the most accurate and up-to-date information you can find nowhere else. Please always referring to the specification when you are documenting, coding and discussing.
 
 ### Documentations go first
 

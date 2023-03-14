@@ -1,0 +1,194 @@
+/**
+ * ENRE JSON Output Format
+ *
+ * General rules:
+ *   1. Do not print fields if their value are empty, null, or undefined;
+ *   2. Field keys follow the camelCase naming pattern.
+ */
+{
+    /**
+     * Top level entry: **entities**: Array<Entity>
+     *
+     * This entry holds all entities.
+     */
+    "entities":[
+        /**
+         * Sample entity object.
+         */
+        {
+            /**
+             * id：int
+             *
+             * The numeric id of the entity.
+             *
+             * The id may not be sequential, and also not identical to array index,
+             * do not directly use this as array index.
+             * 
+             * User-defined entities' id start from 0, the id of language built-in
+             * entities are recommended to start from -1 and decrease all the way 
+             * down to -2^31=-2147483648.
+             */
+            "id": 0,
+            /**
+             * name: string
+             *
+             * The short name (usually the identifier) of the entity.
+             */
+            "name": "Foo",
+            /**
+             * qualifiedName: string
+             * 
+             * The qualified name of the entity.
+             */
+            "qualifiedName": "package.Foo",
+            /**
+             * parent: int
+             *
+             * The id of the entity's parent entity.
+             *
+             * @Optional if this entity category itself is the top level entity.
+             */
+            "parent": 0,
+            /**
+             * category: **Capitalized** string
+             * 
+             * The category (type) of the entity.
+             *
+             * The keyword `type` is reserved for future use (possibly relevant to
+             * type systems), and DOES NOT represent entity/dependency type.
+             */
+            "category": "Class",
+            /**
+             * location: Object
+             * 
+             * The location of the entity.
+             *
+             * All line number and column number SHOULD start from 1.
+             *
+             * @Optional if entity does not have a concrete location in file.
+             */
+            "location": {
+                /**
+                 * file: int
+                 *
+                 * The id of a file entity that defines this entity.
+                 */
+                 "file": 0,
+                /**
+                 * identifier: Object
+                 * 
+                 * The identifier range of the entity.
+                 */
+                "identifier":{
+                    /**
+                     * Start point of the identifier.
+                     */
+                    "start":{
+                        "line": 2,
+                        "column": 1
+                    },
+                    /**
+                     * End point of the identifier.
+                     *
+                     * @Optional if the entity is an anonymous entity.
+                     */
+                    "end":{
+                        "line": 2,
+                        "column": 3
+                    }
+                },
+                /** block: Object
+                 *
+                 * The block range of the entity.
+                 *
+                 * @Optional if this does not applies to certain entity categories.
+                 */
+                "block":{
+                    "start":{
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end":{
+                        "line": 5,
+                        "column": 10
+                    }
+                }
+            },
+            /**
+             * anyLanguageSpecificField: any
+             *
+             * Any language/category specific fields can be freely appended at this
+             * level, and the data structure can also be customized, as long as they
+             * are documented in the entity documents.
+             */
+             "customField": ["customValue0", 1]
+        }
+    ],
+    /**
+     * Top level entry: **relations**: Array<Relation>
+     *
+     * This entry holds all relations.
+     */
+    "relations":[
+        /**
+         * Sample relation object.
+         */
+        {
+            /**
+             * from：int
+             *
+             * The id of source entity.
+             */
+            "from": 0,
+            /**
+             * to：int
+             *
+             * The if of destination entity.
+             */
+            "to": 1,
+            /**
+             * category：Capitalized string
+             */
+            "category": "Import",
+            /**
+             * location: object
+             *
+             * The dependency site of this dependency.
+             */
+            "location": {
+                /**
+                 * file：int
+                 *
+                 * The id of a file entity where this dependency happens.
+                 */
+                 "file": 0,
+                /**
+                 * line：int
+                 */
+                "line": 1,
+                /**
+                 * column：int
+                 */
+                "column": 1
+                
+            },
+            /**
+             * anyLanguageSpecificField: any
+             *
+             * Any language/category specific fields can be freely appended at this
+             * level, and the data structure can also be customized, as long as they
+             * are documented in the entity documents.
+             */
+             "customField": ["customValue0", 1]
+        }
+    ],
+    /**
+     * Top level entry: **meta**: Object
+     *
+     * This entry holds all meta information about the format, the language, the config,
+     * and any other customized information.
+     */
+    "meta": {
+        /** Currently not forced **/
+    }
+}
