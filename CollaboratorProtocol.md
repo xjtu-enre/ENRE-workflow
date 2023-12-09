@@ -128,6 +128,8 @@ This pushes commits of the private repo's main branch to the forked repo;
 
 * On forked repo's webpage, you can create a pr to the main ENRE repo to contribute your commits.
 
+* You can then delete the forked repo, and the next time you want to contribute to the main ENRE repo, you will need to create a new fork and perform the above steps again.
+
 > The solution is credit to https://stackoverflow.com/a/30352360/13878671
 
 ## Syncing between upstream and downstream
