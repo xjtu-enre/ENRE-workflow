@@ -34,7 +34,7 @@ While making contributions to ENRE, choose an applicable solution that meets you
     <tr>
         <td rowspan="2">No</td>
         <td>Yes</td>
-        <td rowspan="2">A <a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo">forked</a> private repo</td>
+        <td rowspan="2">A duplicated repo</td>
         <td>A new branch</td>
         <td>Follow scenario YY, but do all things in the forked repo</td>
     </tr>
