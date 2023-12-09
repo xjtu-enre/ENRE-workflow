@@ -36,7 +36,7 @@ While making contributions to ENRE, choose an applicable solution that meets you
         <td>Yes</td>
         <td rowspan="2">A duplicated repo</td>
         <td>A new branch</td>
-        <td>Follow scenario YY, but do all things in the forked repo</td>
+        <td>Follow scenario YY, but do all things in the duplicated repo</td>
     </tr>
     <tr>
         <td>No</td>
