@@ -65,11 +65,70 @@ This kind of commits should not be merged with the main branch, given this commi
 
 ## Scenario NN: An private and common commit
 
-This kind of commits are requested to not be publicly available, so it goes to a private repo (downstream). However, to maintain the proper relationship with the main ENRE repo (upstream), you should fork the main ENRE repo (but not create a new repo and push all files once, which will lose all previous commit history).
+This kind of commits are requested to not be publicly available, so it goes to a private repo (downstream). However, to inherit the previous commit history, you should NOT create a new repo and push all files once (which will lose all previous commit history), but using the GitHub duplicate mechanism. Below is the step-by-step guide.
 
-* **FORK** the main ENRE repo, and push into the new repo.
+> GitHub restrict the visibility of a fork of a public repo to be public, so **fork is NOT appropriate in the scenario**.
 
-> Continue reading [how to sync](#syncing-between-upstream-and-downstream)
+* Using the [**Import a repo**](https://github.com/new/import) page in GitHub, insert the main ENRE repo's url into `Your old repository's clone URL` input field, change the `Owner` to `xjtu-enre` organization, and give it a unique `Repository name`;
+
+* Click the `Begin import` button, and wait GitHub to complete the import;
+
+* Once the duplicated repo is successfully created, you can clone it to local and work on it by
+
+```bash
+$ git clone https://github.com/xjtu-enre/private-repo.git
+$ cd private-repo
+$ private-repo> make some changes
+$ private-repo> git commit
+$ private-repo> git push origin main
+```
+
+### Syncing from the upstream
+
+> Direction: Upstream -> Downstream
+
+To receive new commits that are pushed to the main ENRE repo, follow the guide below.
+
+* (Once) add the main ENRE repo to private's `remote` in your local environment by
+
+```bash
+$ cd private-repo
+$ private-repo> git remote add public https://github.com/xjtu-enre/ENRE-xx.git
+```
+
+* (Periodically) run commands to pull public commits and push them to the private repo
+
+```bash
+$ private-repo> git pull public main
+$ private-repo> git push origin main
+```
+
+> The first `pull` command pull public commits into your local repo, and the second `push` command push your local new commits to GitHub. Both the commands should be executed so that commits in GitHub's public repo can go into GitHub's private repo.
+
+### Contributing to the upstream
+
+> Direction: Upstream <- Downstream
+
+To push private commits back to the main ENRE repo, you will need a fork to serve as the intermediate.
+
+* Using the GitHub web interface to create a fork of the main ENRE repo, naming and owner don't matter;
+
+* then
+
+```bash
+$ git clone https://github.com/yourname/the-fork.git
+$ cd the-fork
+$ the-fork> git remote add private https://github.com/xjtu-enre/private-repo.git
+$ the-fork> git checkout -b pr-name
+$ the-fork> git pull private main
+$ the-fork> git push origin pr-name
+```
+
+This pushes commits of the private repo's main branch to the forked repo;
+
+* On forked repo's webpage, you can create a pr to the main ENRE repo to contribute your commits.
+
+> The solution is credit to https://stackoverflow.com/a/30352360/13878671
 
 ## Syncing between upstream and downstream
 
@@ -93,9 +152,8 @@ This section discuss the method for syncing commits between upstream and downstr
     </tr>
     <tr>
         <td>Main repo</td>
-        <td>Forked repo</td>
-        <td>Only the main branch of the main repo should be visible to the downstream, you can click the <code>Sync fork</code> button in GitHub</td>
-        <td>Only the main branch of the forked repo should be visible to the upstream, you can create a PR to the upstream in GitHub</td>
+        <td>Private repo</td>
+        <td colspan="2">See <a href="#syncing-from-the-upstream">above</a></td>
     </tr>
 </table>
 
